@@ -12,7 +12,7 @@ sys.path.append(rootPath)
 
 from DVSGestures.CNN import Config
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "4,"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "4,"
 
 
 class Logger(object):

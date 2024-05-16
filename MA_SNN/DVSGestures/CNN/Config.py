@@ -4,7 +4,7 @@ import torch.nn as nn
 
 class configs(object):
     def __init__(self):
-        self.dt = 25
+        self.dt = 15
         self.T = 60
 
         self.attention = "no"
