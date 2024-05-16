@@ -4,3 +4,4 @@ __pycache__
 /MA_SNN/DVSGestures/data/train
 /MA_SNN/DVSGestures/data/test
 MA_SNN/DVSGestures/data/DvsGesture.tar.gz
+info.txt
