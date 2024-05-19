@@ -1,5 +1,6 @@
 import os, torch
 import torch.nn as nn
+from spikingjelly.activation_based.neuron import surrogate
 
 
 class configs(object):
@@ -7,7 +8,7 @@ class configs(object):
         self.dt = 15
         self.T = 60
 
-        self.attention = "no"
+        self.attention = "TCSA"
         self.c_ratio=8
         self.t_ratio=5
         self.epoch = 0
@@ -16,7 +17,7 @@ class configs(object):
         self.pretrained_path = None
 
         self.batch_size = 128
-        self.batch_size_test = 128
+        self.batch_size_test = 28
 
         # None  'kaiming'  'xavier'
         self.init_method = None
@@ -37,17 +38,23 @@ class configs(object):
         self.interval_scaling = False
 
         # network
-        self.beta = 0
+        self.beta = 0.
         self.alpha = 0.3
-        self.Vreset = 0
+        self.Vreset = 0.
         self.Vthres = 0.3
         self.reduction = 16
         self.T_extend_Conv = False
         self.T_extend_BN = False
         self.h_conv = False
+        self.step_mode = "m"
+        # self.surrogate_function = surrogate.Sigmoid()
+        self.surrogate_function = surrogate.LeakyKReLU()
+        self.backend = "cupy"
+        # Old parameters
         self.mem_act = torch.relu
         self.mode_select = "spike"
         self.TR_model = "NTR"
+
 
         # BatchNorm
         self.track_running_stats = True

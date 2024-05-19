@@ -74,9 +74,9 @@ def create_net(config):
                     "Vreset": config.Vreset,
                     "Vthres": config.Vthres,
                 },
-                step_mode="m",
-                surrogate_function=torch.relu,
-                backend="cupy",
+                step_mode=config.step_mode,
+                surrogate_function=config.surrogate_function,
+                backend=config.backend,
                 track_running_stats=config.track_running_stats,
                 c_ratio=config.c_ratio,
                 t_ratio=config.t_ratio
@@ -98,9 +98,9 @@ def create_net(config):
                     "Vreset": config.Vreset,
                     "Vthres": config.Vthres,
                 },
-                step_mode="m",
-                surrogate_function=torch.relu,
-                backend="cupy",
+                step_mode=config.step_mode,
+                surrogate_function=config.surrogate_function,
+                backend=config.backend,
                 track_running_stats=config.track_running_stats,
                 c_ratio=config.c_ratio,
                 t_ratio=config.t_ratio
@@ -122,9 +122,9 @@ def create_net(config):
                     "Vreset": config.Vreset,
                     "Vthres": config.Vthres,
                 },
-                step_mode="m",
-                surrogate_function=torch.relu,
-                backend="cupy",
+                step_mode=config.step_mode,
+                surrogate_function=config.surrogate_function,
+                backend=config.backend,
                 track_running_stats=config.track_running_stats,
                 c_ratio=config.c_ratio,
                 t_ratio=config.t_ratio
@@ -142,9 +142,9 @@ def create_net(config):
                     "Vreset": config.Vreset,
                     "Vthres": config.Vthres,
                 },
-                step_mode="m",
-                surrogate_function=torch.relu,
-                backend="cupy",
+                step_mode=config.step_mode,
+                surrogate_function=config.surrogate_function,
+                backend=config.backend,
                 track_running_stats=config.track_running_stats,
                 t_ratio=config.t_ratio
             )
@@ -153,34 +153,40 @@ def create_net(config):
                 attention="no"
                 if config.attention in ["no", "CA", "SA", "CSA"]
                 else "TA",
-                inputSize=cfg_fc[0],
-                hiddenSize=cfg_fc[1],
+                inputSize=cfg_fc[1],
+                hiddenSize=cfg_fc[2],
                 useBatchNorm=True,
                 T=config.T,
                 pa_dict={
                     "Vreset": config.Vreset,
                     "Vthres": config.Vthres,
                 },
-                step_mode="m",
-                surrogate_function=torch.relu,
-                backend="cupy",
+                step_mode=config.step_mode,
+                surrogate_function=config.surrogate_function,
+                backend=config.backend,
                 track_running_stats=config.track_running_stats,
                 t_ratio=config.t_ratio
             )
 
         def forward(self, input):
+            # print("input: ",input.shape)
             b, t, _, _, _ = input.size()
             outputs = input
 
             outputs = self.convAttLIF0(outputs)
+            # print("convAttLIF0: ",outputs.shape)
             outputs = self.convAttLIF1(outputs)
+            # print("convAttLIF1: ",outputs.shape)
             outputs = self.convAttLIF2(outputs)
+            # print("convAttLIF2: ",outputs.shape)
 
             outputs = outputs.reshape(b, t, -1)
-
+            # print("fc_input: ",outputs.shape)
             outputs = self.FC0(outputs)
+            # print("FC0: ",outputs.shape)
 
             outputs = self.FC1(outputs)
+            # print("FC1: ",outputs.shape)
             outputs = torch.sum(outputs, dim=1)
             outputs = outputs / t
 

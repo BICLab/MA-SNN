@@ -54,7 +54,8 @@ def process(config):
             # config.model=config.model.module.cpu()
             # device_saved=config.device
             # config.device='cpu'
-            #torch.cuda.empty_cache()
+            gc.collect()
+            torch.cuda.empty_cache()
             #time.sleep(3)
             #config.model=config.model.to(torch.device('cuda:0'))
             #config.model = nn.DataParallel(config.model, device_ids=config.device_ids)
@@ -97,6 +98,8 @@ def process(config):
                 )
 
             print('beat acc:',config.best_acc)
+            gc.collect()
+            torch.cuda.empty_cache()
         # if config.onlyTest == False:
         #     config.device=device_saved
         #     config.model=config.model.to(torch.device('cuda:0'))
