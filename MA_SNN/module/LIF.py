@@ -6,15 +6,15 @@ class IFCell(nn.Module):
     def __init__(self,
                  inputSize,
                  hiddenSize,
-                 spikeActFun,
-                 scale=0.3,
+                 spikeActFun,#放电函数
+                 scale=0.3,#
                  pa_dict=None,
                  pa_train_self=False,
                  bias=True,
                  p=0,
-                 mode_select='spike',
+                 mode_select='spike',#模式设置，spike：脉冲放电，mem：膜电位放电
                  mem_act=torch.relu,
-                 TR_model='NTR',
+                 TR_model='NTR',#膜电位是否使用时间常数规则，NTR：不使用，TR：使用
                  ):
         super().__init__()
         self.inputSize = inputSize
@@ -84,6 +84,7 @@ class IFCell(nn.Module):
         if input.device != self.h.device:
             input = input.to(self.h.device)
 
+        # 整合放电过程
         # Step 1: accumulate and reset,spike used as forgetting gate
         u = self.h + input
 
@@ -95,7 +96,7 @@ class IFCell(nn.Module):
         # step 4:
         if self.mode_select == 'spike':
             x = x
-        elif self.mode_select == 'mem':
+        elif self.mode_select == 'mem':# 膜电位模式
 
             # TR
             if self.TR_model == 'TR':

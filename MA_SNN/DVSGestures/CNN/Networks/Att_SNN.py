@@ -195,18 +195,24 @@ def create_net(config):
             )
 
         def forward(self, input):
+            # print("input: ",input.shape)
             b, t, _, _, _ = input.size()
             outputs = input
 
             outputs = self.convAttLIF0(outputs)
+            # print("convAttLIF0: ",outputs.shape)
             outputs = self.convAttLIF1(outputs)
+            # print("convAttLIF1: ",outputs.shape)
             outputs = self.convAttLIF2(outputs)
+            # print("convAttLIF1: ",outputs.shape)
 
             outputs = outputs.reshape(b, t, -1)
-
+            # print("fc_input: ",outputs.shape)
             outputs = self.FC0(outputs)
+            # print("FC0: ",outputs.shape)
 
             outputs = self.FC1(outputs)
+            # print("FC1: ",outputs.shape)
             outputs = torch.sum(outputs, dim=1)
             outputs = outputs / t
 

@@ -15,7 +15,9 @@ def train(config):
         input = input.float().to(config.device)
         labels = labels[:, 1, :].float().to(config.device)
 
-
+        # print(input)
+        # print(input.shape)
+        # exit()
         
 
         outputs = config.model(input)
@@ -35,5 +37,8 @@ def train(config):
         bar_train.update()
         bar_train.set_description("Train:Epoch[%d/%d]" % (config.epoch + 1, config.num_epochs))
         bar_train.set_postfix(Loss=loss.item())
+
+        del loss,outputs,input,labels
+        torch.cuda.empty_cache()
 
     bar_train.close()

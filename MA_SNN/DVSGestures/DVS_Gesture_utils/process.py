@@ -1,6 +1,8 @@
 from DVSGestures.DVS_Gesture_utils.train import train
 from DVSGestures.DVS_Gesture_utils.test import test
-import torch
+import torch,gc
+import time
+from torch import nn
 import os
 
 
@@ -49,9 +51,18 @@ def process(config):
             config.loss_train_list.append(config.train_loss)
             config.acc_train_list.append(config.train_acc)
 
+            # config.model=config.model.module.cpu()
+            # device_saved=config.device
+            # config.device='cpu'
+            gc.collect()
+            torch.cuda.empty_cache()
+            #time.sleep(3)
+            #config.model=config.model.to(torch.device('cuda:0'))
+            #config.model = nn.DataParallel(config.model, device_ids=config.device_ids)
+            
+
         # test
         with torch.no_grad():
-
 
             config.model.eval()
 
@@ -87,3 +98,9 @@ def process(config):
                 )
 
             print('beat acc:',config.best_acc)
+            gc.collect()
+            torch.cuda.empty_cache()
+        # if config.onlyTest == False:
+        #     config.device=device_saved
+        #     config.model=config.model.to(torch.device('cuda:0'))
+        #     config.model = nn.DataParallel(config.model, device_ids=config.device_ids)
